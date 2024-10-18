@@ -27,17 +27,21 @@
 //
 // You should NOT modify any existing code except for adding two lines of attributes.
 
-// I AM NOT DONE
-
 extern "Rust" {
     fn my_demo_function(a: u32) -> u32;
     fn my_demo_function_alias(a: u32) -> u32;
 }
 
-mod Foo {
-    // No `extern` equals `extern "Rust"`.
+mod foo {
+    // No `extern` equals `extern "Rust"`.z
+    #[no_mangle]
     fn my_demo_function(a: u32) -> u32 {
         a
+    }
+    
+    #[no_mangle]
+    fn my_demo_function_alias(a: u32) -> u32 {
+        my_demo_function(a)
     }
 }
 

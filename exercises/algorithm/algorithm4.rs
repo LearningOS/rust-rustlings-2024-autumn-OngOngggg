@@ -3,8 +3,7 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
-use std::cmp::Ordering;
+//use std::cmp::Ordering;
 use std::fmt::Debug;
 
 
@@ -41,7 +40,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord + Clone,
 {
 
     fn new() -> Self {
@@ -50,13 +49,36 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        let new_node = Box::new(TreeNode::new(value.clone()));
+        match self.root{
+            Some(ref mut node) =>{
+                node.insert(value);
+            },
+            None =>{
+                self.root = Some(new_node);
+            },
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        fn search_node<T: Ord>(node: &Option<Box<TreeNode<T>>>, value: T) -> bool {
+            match node {
+                None => false, 
+                Some(ref boxed_node) => {
+                    if value == boxed_node.value {
+                        true 
+                    } else if value < boxed_node.value {
+                        search_node(&boxed_node.left, value) 
+                    } else {
+                        search_node(&boxed_node.right, value) 
+                    }
+                }
+            }
+        }
+
+        // 从根节点开始搜索
+        search_node(&self.root, value)
     }
 }
 
@@ -66,7 +88,26 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        if value<self.value{
+            match self.left{
+                None =>{
+                    self.left = Some(Box::new(TreeNode::new(value)));
+                }
+                Some(ref mut left_node) => {
+                    left_node.insert(value);
+                }
+            }
+        }
+        else if value>self.value{
+            match self.right{
+                None =>{
+                    self.right = Some(Box::new(TreeNode::new(value)));
+                }
+                Some(ref mut right_node) => {
+                    right_node.insert(value);
+                }
+            }
+        }
     }
 }
 
